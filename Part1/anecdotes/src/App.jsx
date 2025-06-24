@@ -1,4 +1,11 @@
 import { useState } from 'react'
+import './App.css'
+
+const VotesDisplay = ({votes}) => {
+  return(
+    <p>Votes: {votes}</p>
+  )
+}
 
 const MostVoted = ({anecdotes, votes}) => {
   let maxVotes = 0;
@@ -13,8 +20,8 @@ const MostVoted = ({anecdotes, votes}) => {
      
   return (
     <>
-      <p>{anecdotes[maxVotesIndex]}</p>
-      <p>has {maxVotes} votes</p>
+      <p>"{anecdotes[maxVotesIndex]}"</p>      
+      <VotesDisplay votes={maxVotes}/>
     </>
   )
 }
@@ -46,12 +53,15 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
       <h1>Anecdote of the Day</h1>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
-      <button onClick={() => addVote()}>vote</button>
-      <button onClick={() => generateAnecdote()}>next anecdote</button>  
+      <p>"{anecdotes[selected]}"</p>      
+      <VotesDisplay votes={votes[selected]}/>
+
+      <div>
+        <button onClick={() => addVote()}>vote</button>
+        <button onClick={() => generateAnecdote()}>next anecdote</button>  
+      </div>      
 
       <h2>Anecdote with the most votes</h2>
       <MostVoted anecdotes={anecdotes} votes={votes}></MostVoted>    
