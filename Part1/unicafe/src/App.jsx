@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './App.css'
 
 const Buttom = ({handleClick, text}) => {
   return (
@@ -50,12 +51,14 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   return (
-    <div>
+    <div className='container'>
       <h1>Give Feedback</h1>
-      <Buttom handleClick={()=> setGood(good + 1)} text={"good"}></Buttom>
-      <Buttom handleClick={()=> setNeutral(neutral + 1)} text={"neutral"}></Buttom>
-      <Buttom handleClick={()=> setBad(bad + 1)} text={"bad"}></Buttom>
-
+      <div>
+        <Buttom handleClick={()=> setGood(good + 1)} text={"good"}></Buttom>
+        <Buttom handleClick={()=> setNeutral(neutral + 1)} text={"neutral"}></Buttom>
+        <Buttom handleClick={()=> setBad(bad + 1)} text={"bad"}></Buttom>
+      </div>
+      
       <h2>Statistics</h2>
       <Statistics good={good} neutral={neutral} bad={bad}></Statistics>      
     </div>
