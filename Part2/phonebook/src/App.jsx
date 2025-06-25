@@ -11,11 +11,18 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const newPerson = {
-      id: Math.floor(Math.random() * 1000),
-      name: newName      
-    }
-    setPersons(persons.concat(newPerson))
+    const nameExists = persons.find(p => p.name === newName)   
+    
+    if (nameExists){
+      alert(`${newName} is already added to phonebook`)      
+    } else {      
+      const newPerson = {
+        id: Math.floor(Math.random() * 1000),
+        name: newName      
+      }  
+      setPersons(persons.concat(newPerson))      
+    }    
+
     setNewName('')
   }
 
