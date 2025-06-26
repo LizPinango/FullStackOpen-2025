@@ -27,14 +27,16 @@ const App = () => {
     if (nameExists){
       alert(`${newName} is already added to phonebook`)      
     } else {      
-      const newPerson = {
-        id: Math.floor(Math.random() * 1000),
+      const newPerson = {        
         name: newName,
         number: newNumber      
-      }  
-      setPersons(persons.concat(newPerson))      
-    }    
-
+      }        
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data)) 
+        })     
+    } 
     setNewName('')
     setNewNumber('')
   }
@@ -53,7 +55,6 @@ const App = () => {
       setFilteredPersons([]);
     }
   }
-
   
   return (
     <div>
