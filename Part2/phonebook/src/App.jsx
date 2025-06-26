@@ -4,6 +4,8 @@ import personsServices from './services/persons'
 import NewPersonForm from './components/NewPersonForm'
 import Filter from './components/Filter'
 import PersonsDisplay from './components/PersonsDisplay'
+import Notification from './components/Notification'
+import './App.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('');
   const [filteredPersons, setFilteredPersons] = useState([])
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personsServices
@@ -31,6 +34,7 @@ const App = () => {
           .update(updatedPerson.id, updatedPerson) 
           .then(returnedPerson => {
             setPersons(persons.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
+            handleMessage(`Changed ${returnedPerson.name} number`)
           })
       } 
     } else {      
@@ -42,7 +46,8 @@ const App = () => {
         .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson)) 
-        })     
+          handleMessage(`Added ${returnedPerson.name}`) 
+        })          
     } 
     setNewName('')
     setNewNumber('')
@@ -67,14 +72,24 @@ const App = () => {
     if (window.confirm(`Do you want to delete ${name}`)) {      
       personsServices.deleteOne(id)
         .then(returnedPerson => {                         
-          setPersons(persons.filter(p => p.id !== returnedPerson.id))          
+          setPersons(persons.filter(p => p.id !== returnedPerson.id)) 
+          handleMessage(`Deleted ${returnedPerson.name}`)         
         })
     }    
+  }
+
+  const handleMessage = (message) => {
+    setMessage(message)          
+    setTimeout(() => {
+      setMessage(null);      
+    }, 7000)
   }
   
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
+
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
 
       <h2>add a new</h2>
