@@ -14,6 +14,7 @@ const App = () => {
   const [filter, setFilter] = useState('');
   const [filteredPersons, setFilteredPersons] = useState([])
   const [message, setMessage] = useState(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     personsServices
@@ -36,6 +37,10 @@ const App = () => {
             setPersons(persons.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
             handleMessage(`Changed ${returnedPerson.name} number`)
           })
+          .catch(error => { 
+            setError(true);
+            handleMessage(`Information of ${updatedPerson.name} has been removed from server`)
+          })
       } 
     } else {      
       const newPerson = {        
@@ -47,7 +52,11 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson)) 
           handleMessage(`Added ${returnedPerson.name}`) 
-        })          
+        })   
+        .catch(error => { 
+          setError(true);
+          handleMessage(`could not add ${returnedPerson.name}`)
+        })       
     } 
     setNewName('')
     setNewNumber('')
@@ -75,20 +84,25 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== returnedPerson.id)) 
           handleMessage(`Deleted ${returnedPerson.name}`)         
         })
+        .catch(error => { 
+          setError(true);
+          handleMessage(`${returnedPerson.name} could not be deleted`)
+        })
     }    
   }
 
   const handleMessage = (message) => {
     setMessage(message)          
     setTimeout(() => {
-      setMessage(null);      
-    }, 7000)
+      setMessage(null);  
+      setError(false)    
+    }, 5000)
   }
   
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification message={message} error={error}/>
 
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
 

@@ -7,3 +7,13 @@
   padding: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+.error-box {
+  border: solid;
+  border-color: red;
+  border-radius: 0.5rem;
+  color:red;
+  font-size: large;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
