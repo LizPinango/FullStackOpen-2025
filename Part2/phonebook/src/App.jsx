@@ -14,9 +14,9 @@ const App = () => {
 
   useEffect(() => {
     personsServices
-      .getAll()
-      .then(response => {
-        setPersons(response.data)
+      .getAll()      
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -25,7 +25,14 @@ const App = () => {
     const nameExists = persons.find(p => p.name === newName)   
     
     if (nameExists){
-      alert(`${newName} is already added to phonebook`)      
+      if (window.confirm(`${nameExists.name} is already added to the phonebook, replace the old number with the new one?`)){        
+        const updatedPerson = {...nameExists, number: newNumber} 
+        personsServices
+          .update(updatedPerson.id, updatedPerson) 
+          .then(returnedPerson => {
+            setPersons(persons.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
+          })
+      } 
     } else {      
       const newPerson = {        
         name: newName,
@@ -33,8 +40,8 @@ const App = () => {
       }        
       personsServices
         .create(newPerson)
-        .then(response => {
-          setPersons(persons.concat(response.data)) 
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson)) 
         })     
     } 
     setNewName('')
@@ -59,8 +66,8 @@ const App = () => {
   const handleDelete = (id, name) => {
     if (window.confirm(`Do you want to delete ${name}`)) {      
       personsServices.deleteOne(id)
-        .then(response => {                
-          setPersons(persons.filter(p => p.id !== id))          
+        .then(returnedPerson => {                         
+          setPersons(persons.filter(p => p.id !== returnedPerson.id))          
         })
     }    
   }
