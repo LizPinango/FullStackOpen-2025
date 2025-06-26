@@ -1,7 +1,7 @@
 const Filter = ({filter, handleFilterChange}) => {
   return(
-    <div>
-      <label htmlFor='filter-input'>filter show with </label>
+    <div className="filter-container">
+      <label htmlFor='filter-input'>Filter show with </label>
       <input id='filter-input' value={filter} onChange={handleFilterChange}/>
     </div>
   )

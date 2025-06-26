@@ -1,7 +1,7 @@
 const Notification = ({message, error}) => {
   if (message != null){
     return(
-      <div className={error ? 'error-box' : 'notification-box'}>
+      <div className={error ? 'message-box error-box' : 'message-box notification-box' }>
         <p>{message}</p>
       </div>
     )  

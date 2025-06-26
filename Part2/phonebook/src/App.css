@@ -1,19 +1,99 @@
-.notification-box {
-  border: solid;
-  border-color: green;
-  border-radius: 0.5rem;
-  color:green;
-  font-size: large;
+body {
+  margin: 0;
+}
+
+main h2 {
+  margin: 1rem 2rem
+}
+
+.filter-container {
+  padding: 0.5rem 5rem;
+  margin: 0;
+  background-color: lightgrey;
+}
+
+.filter-container input {
+  width: 50%;
+  border-radius: 0.25rem;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0.2rem;
+  box-sizing: border-box;
+}
+
+.phonebook-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 5rem;
+}
+
+.persons-container {
+  height: 20rem;
+  line-height: 1rem;
+  overflow-y: scroll;
+}
+
+.person-info-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.form-container {
+  width: 90%;
+  border: solid;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-right: 10rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container h2 {
+  margin: 0.1rem;
+  align-self: center;
+}
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.2rem;
+  box-sizing: border-box;
+}
+
+.add-btn {
+  width: 3.5rem;
+  height: 2rem;
+  margin-top: 1rem;
+  align-self: center;
+}
+
+.delete-btn {
+  width: 5rem;
+  height: 2rem;
+  margin-inline-start: 0.5rem;
+}
+
+.message-box {  
+  border: solid;
+  border-radius: 0.5rem;
+  font-size: large;
+  padding: 0.1rem 1rem;
+  margin: 1rem;
+}
+
+.notification-box {
+  border-color: green;
+  color: green;
 }
 
 .error-box {
-  border: solid;
   border-color: red;
-  border-radius: 0.5rem;
-  color:red;
-  font-size: large;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  color: red;
 }

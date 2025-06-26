@@ -5,8 +5,11 @@ const PersonsDisplay = ({persons, filteredPersons, handleDelete}) => {
 
   return(
     <div>
-      {personsToShow.map(p => <PersonInfo key={p.id} person={p} handleDelete={handleDelete}/> )}  
+      <h2>Numbers</h2>
+      <div className="persons-container">      
+        {personsToShow.map(p => <PersonInfo key={p.id} person={p} handleDelete={handleDelete}/> )}  
     </div>
+    </div>    
   )
 }
 

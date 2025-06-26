@@ -100,24 +100,27 @@ const App = () => {
   }
   
   return (
-    <div>
-      <h2>Phonebook</h2>
-      <Notification message={message} error={error}/>
-
+    <main>
+      <h2>Phonebook</h2>  
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
 
-      <h2>add a new</h2>
-      <NewPersonForm 
-        addPerson={addPerson} 
-        newName={newName} 
-        newNumber={newNumber}
-        handleNameChange={handleNameChange}          
-        handleNumberChange={handleNumberChange} 
-      />      
+      <Notification message={message} error={error}/>
       
-      <h2>Numbers</h2>
-      <PersonsDisplay persons={persons} filteredPersons={filteredPersons} handleDelete={handleDelete}/>
-    </div>
+      <div className='phonebook-container'>
+        <section>
+          <PersonsDisplay persons={persons} filteredPersons={filteredPersons} handleDelete={handleDelete}/>
+        </section>
+        <aside>
+          <NewPersonForm 
+            addPerson={addPerson} 
+            newName={newName} 
+            newNumber={newNumber}
+            handleNameChange={handleNameChange}          
+            handleNumberChange={handleNumberChange} 
+          />      
+        </aside>
+      </div>  
+    </main>
   )
 }
 

@@ -1,9 +1,15 @@
 const PersonInfo = ({person, handleDelete}) => {
   return(
-    <p>
-      {person.name} {person.number} 
-      <button onClick={() => handleDelete(person.id, person.name)}>delete</button>
-    </p>
+    <div className="person-info-container">
+      <p>
+        {person.name} {person.number} 
+      </p>
+      <button 
+        className="delete-btn"
+        onClick={() => handleDelete(person.id, person.name)}>
+        delete
+      </button>
+    </div> 
   )
 }
 
