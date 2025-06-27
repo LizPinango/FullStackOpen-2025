@@ -29,7 +29,7 @@ function App() {
         />
       </div>
 
-      <CoutriesList countries={matchedCountries}/>
+      <CoutriesList countries={matchedCountries} show={setSearchParam}/>
     </main>
   )
 }
