@@ -13,7 +13,7 @@ const CoutriesList = ({countries, show}) => {
       <div>
         <ul>
           {countries.map(country => 
-            <li key={country.ccn3}>
+            <li key={country.name.common}>
               {country.name.common} 
               <button onClick={() => show(country.name.common)}>
                 show
