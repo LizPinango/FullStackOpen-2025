@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 
-import CoutriesList from "./components/CountriesList"; 
+import CoutriesList from "./components/CountriesList";
+import './App.css'
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -20,7 +21,7 @@ function App() {
 
   return(
     <main>
-      <div>
+      <div className="search-countainer">
         <label htmlFor='search-input'>Find Countries: </label>
         <input 
           id='search-input' 

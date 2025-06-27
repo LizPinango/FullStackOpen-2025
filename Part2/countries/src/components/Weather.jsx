@@ -17,16 +17,20 @@ const Weather = ({cityName}) => {
   if(weather !== null){    
     const iconUrl = urlIcon + weather.weather[0].icon + ".png";
     return(
-      <div>
+      <div className="weather-container">
         <h2>Weather in {cityName}</h2>
-        <p>Temperature: {(weather.main.temp - 273.15).toFixed(2)}°C</p>        
-        <img src={iconUrl}  alt={weather.weather[0].description}/>
-        <p>Wind speed: {weather.wind.speed} m/s</p>
+        <div className="weather-info">
+          <img src={iconUrl}  alt={weather.weather[0].description}/>
+          <p><b>Temperature:</b> {(weather.main.temp - 273.15).toFixed(2)}°C</p>  
+          <p><b>Wind speed:</b> {weather.wind.speed} m/s</p>
+        </div>        
       </div>
     )
   }
   return(
-    <p>can't fin weather data </p>
+    <div className="message-container">
+      <p>loading... </p>
+    </div>    
   )
 }
 

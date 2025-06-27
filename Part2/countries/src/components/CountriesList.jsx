@@ -4,17 +4,19 @@ const CoutriesList = ({countries, show}) => {
     
   if (countries.length > 10) {
     return(
-      <p>too many results</p>
+      <div className="message-container">
+        <p>too many results</p>
+      </div>      
     )
   }
 
   if (countries.length > 1) {
     return(
-      <div>
+      <div className="countries-list-container">
         <ul>
           {countries.map(country => 
             <li key={country.name.common}>
-              {country.name.common} 
+              <h3>- {country.name.common} </h3>
               <button onClick={() => show(country.name.common)}>
                 show
               </button>
@@ -32,7 +34,9 @@ const CoutriesList = ({countries, show}) => {
   }
   
   return(
-    <p>not results</p>
+    <div className="message-container">
+      <p>not results</p>
+    </div>    
   )
 }
 
