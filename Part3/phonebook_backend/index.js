@@ -28,7 +28,10 @@ let persons = [
 
 app.use(express.json());
 
-app.use(morgan('tiny'))
+// Custom morgan token to log the request body
+morgan.token('body', req => JSON.stringify(req.body))
+// Use morgan to log requests with method, url, status, content-length, response time, and body
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.get('/', (req, res) => {
     res.send('<h1>Phonebook</h1>');
