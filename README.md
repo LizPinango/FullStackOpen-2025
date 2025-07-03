@@ -2,6 +2,13 @@
 
 [FullstackOpen](https://fullstackopen.com/en/) Course Exercises
 
+## Content Table 
+
+- [Part0](#part0---fundamentals-of-web-apps)
+- [Part1](#part1---introduction-to-react)
+- [Part2](#part2---communicating-with-server)
+- [Part3](#part3---programming-a-server-with-nodejs-and-express)
+
 ## Course Content
 
 ### Part0 - Fundamentals of Web apps
