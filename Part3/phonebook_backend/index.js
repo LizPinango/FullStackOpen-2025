@@ -52,6 +52,20 @@ app.get('/api/persons/:id', (req, res) => {
     } 
 });
 
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+  
+  const newPerson = {
+    id: (Math.random() * 10000).toFixed(0), // simple ID generation
+    name: body.name,
+    number: body.number
+  };
+
+  persons = persons.concat(newPerson);
+  res.status(201).json(newPerson);
+
+});  
+
 app.delete('/api/persons/:id', (req, res) => {
   const id = req.params.id
   persons = persons.filter(p => p.id !== id)
