@@ -37,6 +37,7 @@ app.get('/info', (req, res) => {
     res.send(info);
 });
 
+
 app.get('/api/persons', (req, res) => {
     res.json(persons);
 })
@@ -50,6 +51,13 @@ app.get('/api/persons/:id', (req, res) => {
         res.status(404).send({ error: 'Person not found' });
     } 
 });
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  persons = persons.filter(p => p.id !== id)
+
+  res.status(204).end()
+})
 
 const PORT = 3001;
 app.listen(PORT, () => {
