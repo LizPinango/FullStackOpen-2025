@@ -80,9 +80,9 @@ const App = () => {
   const handleDelete = (id, name) => {
     if (window.confirm(`Do you want to delete ${name}`)) {      
       personsServices.deleteOne(id)
-        .then(returnedPerson => {                         
-          setPersons(persons.filter(p => p.id !== returnedPerson.id)) 
-          handleMessage(`Deleted ${returnedPerson.name}`)         
+        .then(response => {                         
+          setPersons(persons.filter(p => p.id !== id)) 
+          handleMessage(`Deleted ${name}`)         
         })
         .catch(error => { 
           setError(true);

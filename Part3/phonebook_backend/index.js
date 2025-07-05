@@ -1,7 +1,16 @@
 const express = require('express');
-const morgan = require('morgan')
+const cors = require('cors');
+const morgan = require('morgan');
 
 const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+// Custom morgan token to log the request body
+morgan.token('body', req => JSON.stringify(req.body))
+// Use morgan to log requests with method, url, status, content-length, response time, and body
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 let persons = [
     { 
@@ -25,13 +34,6 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
-
-app.use(express.json());
-
-// Custom morgan token to log the request body
-morgan.token('body', req => JSON.stringify(req.body))
-// Use morgan to log requests with method, url, status, content-length, response time, and body
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.get('/', (req, res) => {
     res.send('<h1>Phonebook</h1>');
