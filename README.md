@@ -1,2 +1,54 @@
-# FullStackOpen-2025
-FullstackOpen Course Exercises
+# FullStackOpen
+
+[FullstackOpen](https://fullstackopen.com/en/) Course Exercises
+
+## Content Table 
+
+- [Part0](#part0---fundamentals-of-web-apps)
+- [Part1](#part1---introduction-to-react)
+- [Part2](#part2---communicating-with-server)
+- [Part3](#part3---programming-a-server-with-nodejs-and-express)
+
+## Course Content
+
+### Part0 - Fundamentals of Web apps
+
+#### Content
+
+- Course General Info
+- Fundamentals of Web apps
+
+### Part1 - Introduction to React
+
+Objective ->  become familiar with the React library
+
+#### Content
+
+- Introduction to React
+- JavaScript
+- Component state, event handlers 
+- A more complex state, debugging React apps
+
+### Part2 - Communicating with server
+
+Objective -> learn how to render a data collection, submit data to a React application using HTML forms, fetch and handle data stored in a remote backend server.
+
+#### Content
+
+- Rendering a collection, modules
+- Forms
+- Getting data from server
+- Altering data in server
+- Adding styles to React app
+
+### Part3 - Programming a server with NodeJS and Express
+
+Objective -> Implement a simple REST API in Node.js by using the Express library, and storing the application's in a MongoDB database.
+
+#### Content 
+
+- Node.js and Express
+- Deploying app to internet
+- Saving data to MongoDB
+- Validation and ESLint
+
