@@ -52,3 +52,9 @@ Objective -> Implement a simple REST API in Node.js by using the Express library
 - Saving data to MongoDB
 - Validation and ESLint
 
+Part 3 exercise 10, phonebook backend step 10, required deploying the application to Internet, it can be found [Here](https://phonebook-ancj.onrender.com).
+
+The phonebook information can be access in '/api/persons'.
+
+To see basic information of the project go to '/info'.
+
