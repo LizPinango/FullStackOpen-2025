@@ -6,9 +6,8 @@ const Person = require('./models/persons');
 
 const app = express();
 
+app.use(express.static('dist'));
 app.use(express.json());
-app.use(cors());
-app.use(express.static('dist'))
 
 // Custom morgan token to log the request body
 // Use morgan to log requests with method, url, status, content-length, response time, and body
@@ -51,9 +50,10 @@ app.get('/info', (req, res) => {
 
 
 app.get('/api/persons', (req, res) => {
-  Person.find({}).then(persons => {
-    res.json(persons);
-  })
+  Person.find({})
+    .then(persons => {
+      res.json(persons);
+    })
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -66,7 +66,7 @@ app.get('/api/persons/:id', (req, res) => {
   } 
 });
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
   
   if (!body.name || !body.number) {
@@ -78,17 +78,37 @@ app.post('/api/persons', (req, res) => {
     number: body.number
   });
 
-  person.save().then(savedPerson => {
-    res.json(savedPerson)
-  })
+  person.save()
+    .then(savedPerson => {
+      res.json(savedPerson)
+    })
+    .catch(error => next(error))
 });  
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
     .then(result => {
       res.status(204).end()
     })
+    .catch(error => next(error))
 })
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
