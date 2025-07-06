@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const mongoose = require('mongoose')
 
 const app = express();
 
@@ -36,30 +37,54 @@ let persons = [
     }
 ]
 
+// Connect to MongoDB
+const password = process.argv[2]
+const url = `mongodb+srv://laps1508:${password}@cluster0.bu4jfjr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Person = mongoose.model('Person', personSchema)
+
 app.get('/', (req, res) => {
-    res.send('<h1>Phonebook</h1>');
+  res.send('<h1>Phonebook</h1>');
 });
 
 app.get('/info', (req, res) => {
-    const date = new Date();
-    const info = `<p>Phonebook has info for ${persons.length} people</p>
-                  <p>${date}</p>`; 
-    res.send(info);
+  const date = new Date();
+  const info = `<p>Phonebook has info for ${persons.length} people</p>
+                <p>${date}</p>`; 
+  res.send(info);
 });
 
 
 app.get('/api/persons', (req, res) => {
+  Person.find({}).then(persons => {
     res.json(persons);
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = req.params.id;   
-    const person = persons.find(p => p.id === id);
-    if (person) {   
-        res.json(person);
-    } else {
-        res.status(404).send({ error: 'Person not found' });
-    } 
+  const id = req.params.id;   
+  const person = persons.find(p => p.id === id);
+  if (person) {   
+    res.json(person);
+  } else {
+    res.status(404).send({ error: 'Person not found' });
+  } 
 });
 
 app.post('/api/persons', (req, res) => {
