@@ -1,7 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const mongoose = require('mongoose')
+const Person = require('./models/persons');
 
 const app = express();
 
@@ -10,8 +11,8 @@ app.use(cors());
 app.use(express.static('dist'))
 
 // Custom morgan token to log the request body
-morgan.token('body', req => JSON.stringify(req.body))
 // Use morgan to log requests with method, url, status, content-length, response time, and body
+morgan.token('body', req => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 let persons = [
@@ -36,28 +37,6 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
-
-// Connect to MongoDB
-const password = process.argv[2]
-const url = `mongodb+srv://laps1508:${password}@cluster0.bu4jfjr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-})
-
-personSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Person = mongoose.model('Person', personSchema)
 
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook</h1>');
@@ -94,19 +73,14 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({ error: 'Name or number is missing' });  
   }
 
-  if (persons.find(p => p.name === body.name)) {
-    return res.status(400).json({ error: 'Name must be unique' });  
-  }
-
-  const newPerson = {
-    id: (Math.random() * 10000).toFixed(0), // simple ID generation
+  const person = new Person ({    
     name: body.name,
     number: body.number
-  };
+  });
 
-  persons = persons.concat(newPerson);
-  res.status(201).json(newPerson);
-
+  person.save().then(savedPerson => {
+    res.json(savedPerson)
+  })
 });  
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -116,7 +90,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 })
