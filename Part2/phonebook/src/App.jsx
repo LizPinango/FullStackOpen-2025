@@ -55,7 +55,7 @@ const App = () => {
         })   
         .catch(error => { 
           setError(true);
-          handleMessage(`could not add ${returnedPerson.name}`)
+          handleMessage(error.response.data.error)
         })       
     } 
     setNewName('')
