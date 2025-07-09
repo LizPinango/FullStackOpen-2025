@@ -37,6 +37,7 @@ app.get('/api/persons/:id', (req, res) => {
         res.status(404).end() 
       }
     })
+    // eslint-disable-next-line no-undef
     .catch(error => next(error))
 });
 
@@ -57,7 +58,7 @@ app.post('/api/persons', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -101,6 +102,7 @@ const unknownEndpoint = (req, res) => {
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
