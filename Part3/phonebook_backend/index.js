@@ -43,12 +43,8 @@ app.get('/api/persons/:id', (req, res) => {
 });
 
 app.post('/api/persons', (req, res, next) => {
-  const body = req.body;
+  const body = req.body;  
   
-  if (!body.name || !body.number) {
-    return res.status(400).json({ error: 'Name or number is missing' });  
-  }
-
   const person = new Person ({    
     name: body.name,
     number: body.number
