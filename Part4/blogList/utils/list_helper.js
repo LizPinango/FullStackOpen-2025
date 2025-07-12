@@ -6,7 +6,7 @@ const totalLikes = (blogs) => {
   const reducer = (sum, item) => {
     return sum + item.likes
   }
-  return blogs.reduce(reducer, 0)
+  return blogs.reduce(reducer, 0);
 }
 
 const favoriteBlog = (blogs) => {
@@ -38,6 +38,24 @@ const mostBlogs = (blogs) => {
     author: authorWithMostBlogs,
     blogs: blogCounts[authorWithMostBlogs]
   };
-};
+}
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return null;
+
+  const likesCounts = blogs.reduce((counts, blog) => {
+    counts[blog.author] = (counts[blog.author] || 0) + blog.likes;      
+    return counts
+  }, {});
+  
+  const authorWithMostLikes = Object.keys(likesCounts).reduce((prevAuthor, currentAuthor) => {
+    return likesCounts[prevAuthor] > likesCounts[currentAuthor] ? prevAuthor : currentAuthor;
+  });
+
+  return {
+    author: authorWithMostLikes,
+    likes: likesCounts[authorWithMostLikes]
+  };
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
