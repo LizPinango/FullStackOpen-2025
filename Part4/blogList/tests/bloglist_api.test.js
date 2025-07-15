@@ -122,6 +122,72 @@ describe('Blog API tests', () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
   })
+
+  describe('PUT /api/blogs', () => {
+    test('succeeds with a valid id', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+
+      const editedBlog = { 
+        title: 'Updated Title',
+        author: 'Upadate Author',
+        url: 'Updated Url',
+        likes: blogToUpdate.likes + 1
+      }
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(editedBlog)
+        .expect(200)
+    
+      const updatedBlog = await Blog.findById(blogToUpdate.id)
+
+      assert.strictEqual(updatedBlog.title, editedBlog.title)
+      assert.strictEqual(updatedBlog.author, editedBlog.author)
+      assert.strictEqual(updatedBlog.url, editedBlog.url)
+      assert.strictEqual(updatedBlog.likes, editedBlog.likes)
+    })
+
+    test('fails with status code 400 if id is invalid', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+
+      const editedBlog = { 
+        title: 'Updated Title',
+        author: 'Upadate Author',
+        url: 'Updated Url',
+        likes: blogToUpdate.likes + 1
+      }
+
+      await api
+        .put(`/api/blogs/invalidId12345`)
+        .send(editedBlog)
+        .expect(400)        
+    
+      const updatedBlog = await Blog.findById(blogToUpdate.id)  
+      
+      assert.strictEqual(updatedBlog.title, blogToUpdate.title) 
+      assert.strictEqual(updatedBlog.author, blogToUpdate.author)
+      assert.strictEqual(updatedBlog.url, blogToUpdate.url)
+      assert.strictEqual(updatedBlog.likes, blogToUpdate.likes)
+    })
+
+    test('fails with status code 404 if id does not exist', async () => {
+      const validNonexistingId = await helper.nonExistingId()
+
+      const update = {
+        title: 'updatedTitle',
+        author: 'updatedAuthor',
+        url: 'updatedUrl',
+        likes: 1,
+      }
+
+      await api
+        .put(`/api/blogs/${validNonexistingId}`)
+        .send(update)
+        .expect(404)    
+    })
+  })
 })   
     
 after(async () => {
