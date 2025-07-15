@@ -8,7 +8,7 @@ const app = require('../app')
 
 const api = supertest(app)
 
-const initialBLogs = [
+const initialBlogs = [
   {
     'title': 'Blog One',
     'author': 'Author One',
@@ -25,9 +25,9 @@ const initialBLogs = [
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBLogs[0])
+  let blogObject = new Blog(initialBlogs[0])
   await blogObject.save()
-  blogObject = new Blog(initialBLogs[1])
+  blogObject = new Blog(initialBlogs[1])
   await blogObject.save()
 })
 
@@ -43,7 +43,7 @@ describe('Blog API tests', () => {
     test('returns the correct amount of blogs', async () => {
       const response = await api.get('/api/blogs')
 
-      assert.strictEqual(response.body.length, initialBLogs.length)
+      assert.strictEqual(response.body.length, initialBlogs.length)
     })
 
     test('unique identifier property of the blog post is named id', async () => {
@@ -52,9 +52,31 @@ describe('Blog API tests', () => {
       assert(Object.keys(response.body[0]).includes('id'))
     })
   })  
-})
 
+  describe('POST /api/blogs', () => {
+    test('creates a new blog post', async () => {
+      const newBlog = {
+        title: 'New Blog',
+        author: 'Author Three',
+        url: 'http://example_3.com',
+        likes: 3
+      }      
 
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const response = await api.get('/api/blogs')    
+      const contents = response.body.map(b => b.title)
+    
+      assert.strictEqual(response.body.length, initialBlogs.length + 1)    
+      assert(contents.includes('New Blog'))
+    })
+  })
+})   
+    
 after(async () => {
   await mongoose.connection.close()
 })
