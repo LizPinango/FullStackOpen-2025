@@ -91,6 +91,40 @@ describe('Blog API tests', () => {
     
       assert.strictEqual(response.body[2].likes, 0)  
     })
+
+    test('fails without the tittle data', async () => {
+      const newBlog = {
+        author: 'Author Five',
+        url: 'https://example_5.com',
+        likes: 3
+      }
+    
+      await api
+      .post('/api/blogs')
+      .send(newBlog)      
+      .expect(400)  
+    
+      const response = await api.get('/api/blogs')  
+    
+      assert.strictEqual(response.body.length, initialBlogs.length)
+    })
+    
+    test('fails without the url data', async () => {
+      const newBlog = {
+        title: 'New Blog Without URL',
+        author: 'Author Six',    
+        likes: 3
+      }
+    
+      await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)  
+    
+      const response = await api.get('/api/blogs')  
+    
+      assert.strictEqual(response.body.length, initialBlogs.length)
+    })
   })
 })   
     
