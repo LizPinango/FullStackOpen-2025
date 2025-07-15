@@ -8,6 +8,7 @@
 - [Part1](#part1---introduction-to-react)
 - [Part2](#part2---communicating-with-server)
 - [Part3](#part3---programming-a-server-with-nodejs-and-express)
+- [Part4](#part4---testing-express-servers-user-administration)
 
 ## Course Content
 
@@ -57,4 +58,16 @@ Part 3 exercise 10, phonebook backend step 10, required deploying the applicatio
 The phonebook information can be access in '/api/persons'.
 
 To see basic information of the project go to '/info'.
+
+### Part4 - Testing Express servers, user administration
+
+Objective ->  learn to wirte unit and integration tests for the backend and implement user authentication and authorization.
+
+#### Content
+
+- Structure of backend application, introduction to testing
+- Testing the backend
+- User administration
+- Token authentication
+
 
