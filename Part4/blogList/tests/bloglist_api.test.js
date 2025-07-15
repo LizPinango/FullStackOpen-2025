@@ -74,6 +74,23 @@ describe('Blog API tests', () => {
       assert.strictEqual(response.body.length, initialBlogs.length + 1)    
       assert(contents.includes('New Blog'))
     })
+
+    test('if likes are missing it will default to 0', async () => {
+      const newBlog = {
+        title: 'New Blog Without Likes',
+        author: 'Author Four',
+        url: 'https://example_4.com',
+      }
+    
+      await api
+        .post('/api/blogs')
+        .send(newBlog)        
+        .expect(201)
+    
+      const response = await api.get('/api/blogs')
+    
+      assert.strictEqual(response.body[2].likes, 0)  
+    })
   })
 })   
     
