@@ -4,30 +4,16 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 
 const Blog = require('../models/blog')
+const helper = require('./test_helper')
 const app = require('../app')
 
 const api = supertest(app)
 
-const initialBlogs = [
-  {
-    'title': 'Blog One',
-    'author': 'Author One',
-    'url': 'http://example_2.com',
-    'likes': 0,
-  },
-  {
-    'title': 'Blog Two',
-    'author': 'Author Two',
-    'url': 'http://example_2.com',
-    'likes': 0,
-  }
-]
-
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
+  let blogObject = new Blog(helper.initialBlogs[0])
   await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
+  blogObject = new Blog(helper.initialBlogs[1])
   await blogObject.save()
 })
 
@@ -43,7 +29,7 @@ describe('Blog API tests', () => {
     test('returns the correct amount of blogs', async () => {
       const response = await api.get('/api/blogs')
 
-      assert.strictEqual(response.body.length, initialBlogs.length)
+      assert.strictEqual(response.body.length, helper.initialBlogs.length)
     })
 
     test('unique identifier property of the blog post is named id', async () => {
@@ -71,7 +57,7 @@ describe('Blog API tests', () => {
       const response = await api.get('/api/blogs')    
       const contents = response.body.map(b => b.title)
     
-      assert.strictEqual(response.body.length, initialBlogs.length + 1)    
+      assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)    
       assert(contents.includes('New Blog'))
     })
 
@@ -86,10 +72,9 @@ describe('Blog API tests', () => {
         .post('/api/blogs')
         .send(newBlog)        
         .expect(201)
-    
-      const response = await api.get('/api/blogs')
-    
-      assert.strictEqual(response.body[2].likes, 0)  
+      
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd[2].likes, 0)  
     })
 
     test('fails without the tittle data', async () => {
@@ -104,9 +89,8 @@ describe('Blog API tests', () => {
       .send(newBlog)      
       .expect(400)  
     
-      const response = await api.get('/api/blogs')  
-    
-      assert.strictEqual(response.body.length, initialBlogs.length)
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
     
     test('fails without the url data', async () => {
@@ -121,9 +105,8 @@ describe('Blog API tests', () => {
       .send(newBlog)
       .expect(400)  
     
-      const response = await api.get('/api/blogs')  
-    
-      assert.strictEqual(response.body.length, initialBlogs.length)
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
   })
 })   
