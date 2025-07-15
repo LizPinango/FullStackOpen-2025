@@ -37,7 +37,7 @@ describe('Blog API tests', () => {
   })  
 
   describe('POST /api/blogs', () => {
-    test('creates a new blog post', async () => {
+    test('succeeds with status code 201', async () => {
       const newBlog = {
         title: 'New Blog',
         author: 'Author Three',
@@ -74,7 +74,7 @@ describe('Blog API tests', () => {
       assert.strictEqual(blogsAtEnd[2].likes, 0)  
     })
 
-    test('fails without the tittle data', async () => {
+    test('fails with status code 400 without the tittle data', async () => {
       const newBlog = {
         author: 'Author Five',
         url: 'https://example_5.com',
@@ -90,7 +90,7 @@ describe('Blog API tests', () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
     
-    test('fails without the url data', async () => {
+    test('fails with status code 400 without the url data', async () => {
       const newBlog = {
         title: 'New Blog Without URL',
         author: 'Author Six',    
@@ -104,6 +104,22 @@ describe('Blog API tests', () => {
     
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+  })
+
+  describe('DELETE /api/blog', () => {
+    test('succeeds with status code 204 if id is valid', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+      const blogsAtEnd = await helper.blogsInDb()
+
+      const contents = blogsAtEnd.map(b => b.title)
+      assert(!contents.includes(blogToDelete.title))
+
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
   })
 })   
