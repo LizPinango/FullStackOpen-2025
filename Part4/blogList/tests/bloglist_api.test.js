@@ -1,20 +1,41 @@
 const assert = require('node:assert')
-const { test, after, beforeEach, describe } = require('node:test')
+const { test, after, beforeEach, describe, before } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 const app = require('../app')
 
 const api = supertest(app)
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
-})
+const user = {
+  username: 'root',
+  name: 'user',
+  password: 'sekret'
+}
+
+let header
+let userId
 
 describe('Blog API tests', () => {
+  before(async () => {
+    await User.deleteMany({})
+    let response = await api.post('/api/users').send(user)
+    userId = response.body.id
+
+    response = await api.post('/api/login').send(user)
+    header = {'Authorization': `Bearer ${response.body.token}`}
+  })
+
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(
+      helper.initialBlogs.map(blog => ({ ...blog, user: userId }))
+    )
+  })
+
   describe('GET /api/blogs', () => {
     test('returns blog posts in JSON format', async () => {
       await api
@@ -37,7 +58,7 @@ describe('Blog API tests', () => {
   })  
 
   describe('POST /api/blogs', () => {
-    test('succeeds with status code 201', async () => {
+    test('succeeds with status code 201 if blog is valid and token is provided', async () => {
       const newBlog = {
         title: 'New Blog',
         author: 'Author Three',
@@ -48,6 +69,7 @@ describe('Blog API tests', () => {
       await api
         .post('/api/blogs')
         .send(newBlog)
+        .set(header)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -67,7 +89,8 @@ describe('Blog API tests', () => {
     
       await api
         .post('/api/blogs')
-        .send(newBlog)        
+        .send(newBlog)  
+        .set(header)      
         .expect(201)
       
       const blogsAtEnd = await helper.blogsInDb()
@@ -83,7 +106,8 @@ describe('Blog API tests', () => {
     
       await api
       .post('/api/blogs')
-      .send(newBlog)      
+      .send(newBlog)     
+      .set(header) 
       .expect(400)  
     
       const blogsAtEnd = await helper.blogsInDb()
@@ -100,19 +124,40 @@ describe('Blog API tests', () => {
       await api
       .post('/api/blogs')
       .send(newBlog)
+      .set(header)
       .expect(400)  
     
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('fails with status code 401 if a token is not provided', async () => {
+      const newBlog = {
+        title: 'New Blog Without Token',
+        author: 'Author Three',
+        url: 'http://example_3.com',
+        likes: 3
+      }      
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
   })
 
   describe('DELETE /api/blog', () => {
-    test('succeeds with status code 204 if id is valid', async () => {
+    test('succeeds with status code 204 if id is valid and token is provided', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set(header)
+        .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
 
