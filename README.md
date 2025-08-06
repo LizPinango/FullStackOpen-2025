@@ -73,7 +73,7 @@ Objective ->  learn to wirte unit and integration tests for the backend and impl
 
 ### Part5 - Testing React apps
 
-Objective ->  lear different ways of testing React code, and learn to implement token based authentication.
+Objective ->  learn different ways of testing React code, and learn to implement token based authentication.
 
 #### Content
 
