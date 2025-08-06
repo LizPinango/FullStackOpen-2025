@@ -1,0 +1,17 @@
+.message-box {  
+  border: solid;
+  border-radius: 0.5rem;
+  font-size: large;
+  padding: 0.1rem 1rem;
+  margin: 1rem;
+}
+
+.notification-box {
+  border-color: green;
+  color: green;
+}
+
+.error-box {
+  border-color: red;
+  color: red;
+}
