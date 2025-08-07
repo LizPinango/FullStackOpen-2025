@@ -9,6 +9,7 @@
 - [Part2](#part2---communicating-with-server)
 - [Part3](#part3---programming-a-server-with-nodejs-and-express)
 - [Part4](#part4---testing-express-servers-user-administration)
+- [Part5](#part5---testing-react-apps)
 
 ## Course Content
 
@@ -69,5 +70,19 @@ Objective ->  learn to wirte unit and integration tests for the backend and impl
 - Testing the backend
 - User administration
 - Token authentication
+
+### Part5 - Testing React apps
+
+Objective ->  learn different ways of testing React code, and learn to implement token based authentication.
+
+#### Content
+
+- Login in frontend
+- props.children and proptypes
+- Testing React apps
+- End to end testing: Playwright
+- End to end testing: Cypress
+
+
 
 
