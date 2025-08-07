@@ -48,19 +48,6 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = async (blogObject) => {   
-    blogService
-      .create(blogObject)
-        .then(returnedBlog => {
-          setBlogs(blogs.concat(returnedBlog))          
-          handleMessage(`a new blog '${returnedBlog.title}' by ${returnedBlog.author} added`)
-        })
-        .catch(err => {                
-          setError(true);
-          handleMessage(err.response.data.error)
-        })
-  }
-
   const handleMessage = (message) => {
     setMessage(message)
     setTimeout(() => {
@@ -81,7 +68,14 @@ const App = () => {
           password={password} 
           setPassword={setPassword}
         />
-        : <LoggedInPage user={user} blogs={blogs} handleLogout={handleLogout} createBlog={createBlog}/>           
+        : <LoggedInPage 
+            user={user}   
+            blogs={blogs} 
+            setBlogs={setBlogs}
+            handleLogout={handleLogout} 
+            handleMessage={handleMessage}
+            setError={setError}
+          />           
       }
     </div>
   )
