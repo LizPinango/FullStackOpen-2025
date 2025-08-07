@@ -5,7 +5,6 @@ import LoginForm from './components/LoginForm'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import LoggedInPage from './components/LoggedInPage'
-import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -21,12 +20,19 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)      
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault(); 
     try {
-      const user = await loginService.login({
-        username, password,
-      })
+      const user = await loginService.login({ username, password })      
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -37,6 +43,11 @@ const App = () => {
         setMessage(null)
       }, 5000)
     }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedUser')
+    setUser(null)
   }
 
   return (
@@ -51,7 +62,7 @@ const App = () => {
           password={password} 
           setPassword={setPassword}
         />
-        : <LoggedInPage user={user} blogs={blogs}/>           
+        : <LoggedInPage user={user} blogs={blogs} handleLogout={handleLogout}/>           
       }
     </div>
   )
