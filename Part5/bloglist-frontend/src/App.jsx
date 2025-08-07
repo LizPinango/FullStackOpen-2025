@@ -32,22 +32,41 @@ const App = () => {
     event.preventDefault(); 
     try {
       const user = await loginService.login({ username, password })      
+      blogService.setToken(user.token)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {      
       setError(true)
-      setMessage('Wrong credentials')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      handleMessage('Wrong credentials')
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
+  }
+
+  const createBlog = async (blogObject) => {   
+    blogService
+      .create(blogObject)
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))          
+          handleMessage(`a new blog '${returnedBlog.title}' by ${returnedBlog.author} added`)
+        })
+        .catch(err => {                
+          setError(true);
+          handleMessage(err.response.data.error)
+        })
+  }
+
+  const handleMessage = (message) => {
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+      setError(false)
+    }, 7000)
   }
 
   return (
@@ -62,7 +81,7 @@ const App = () => {
           password={password} 
           setPassword={setPassword}
         />
-        : <LoggedInPage user={user} blogs={blogs} handleLogout={handleLogout}/>           
+        : <LoggedInPage user={user} blogs={blogs} handleLogout={handleLogout} createBlog={createBlog}/>           
       }
     </div>
   )
