@@ -28,7 +28,7 @@ const LoggedInPage = ({user, blogs, setBlogs, handleLogout, handleMessage, setEr
       <p>{user.name} logged in </p> 
       <button onClick={() => handleLogout()}>Logout</button>
 
-      <Togglable buttonLabel='Add New Blog' ref={blogFormRef}>
+      <Togglable buttonLabel='New Blog' ref={blogFormRef}>
         <NewBlogForm createBlog={createBlog}/>
       </Togglable>
       
