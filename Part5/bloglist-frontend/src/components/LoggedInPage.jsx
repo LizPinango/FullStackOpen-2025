@@ -22,6 +22,21 @@ const LoggedInPage = ({user, blogs, setBlogs, handleLogout, handleMessage, setEr
         })
   }
 
+  const likeBlog = async (blog) => {
+    const updatedBlog = {...blog, likes: blog.likes + 1}
+    blogService
+      .like(updatedBlog, blog.id)
+        .then(returnedBlog => {
+          console.log(returnedBlog)
+          setBlogs(blogs.map(b => b.id !== returnedBlog.id ? b : returnedBlog ))
+          handleMessage(`you liked '${returnedBlog.title}' by ${returnedBlog.author}`)
+        })
+        .catch(err => {                
+          setError(true);
+          handleMessage(err.response.data.error)
+        })
+  }
+
   return (
     <>
       <h2>Blogs</h2>
@@ -33,7 +48,7 @@ const LoggedInPage = ({user, blogs, setBlogs, handleLogout, handleMessage, setEr
       </Togglable>
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
       )}
     </>
   )
