@@ -36,6 +36,21 @@ const LoggedInPage = ({user, blogs, setBlogs, handleLogout, handleMessage, setEr
         })
   }
 
+  const deleteBlog = async (blog) => {
+    if (window.confirm(`Do you want to delete the blog "${blog.title}" ?`)){
+      blogService
+        .remove(blog.id)
+          .then(() => {
+            setBlogs(blogs.filter(b => b.id !== blog.id))
+            handleMessage(`'${blog.title}' by ${blog.author} deleted`)
+          })
+          .catch(err => {                
+            setError(true);
+            handleMessage(err.response.data.error)
+          })
+    }    
+  }
+
   return (
     <>
       <h2>Blogs</h2>
@@ -47,7 +62,7 @@ const LoggedInPage = ({user, blogs, setBlogs, handleLogout, handleMessage, setEr
       </Togglable>
 
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>         
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} user={user} deleteBlog={deleteBlog}/>
       )}
     </>
   )

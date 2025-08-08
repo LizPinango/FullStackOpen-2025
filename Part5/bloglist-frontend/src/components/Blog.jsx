@@ -1,9 +1,12 @@
 import { useState } from "react"
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
   const [visible, setVisible] = useState(false)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
+  let canRemove = false
+
+  if (blog.user && blog.user.username === user.username) canRemove = true
 
   return(
     <div className="blog-container">
@@ -13,7 +16,8 @@ const Blog = ({ blog, likeBlog }) => {
         <p>{blog.url}</p>
         <p>likes {blog.likes}</p>
         <button onClick={() => likeBlog(blog)}>like</button>
-        <p>save by {blog.user ? blog.user.username : 'anonymous'}</p>         
+        <p>save by {blog.user ? blog.user.username : 'anonymous'}</p>      
+        { canRemove && <button onClick={() => deleteBlog(blog)}>delete</button> }
       </div>
     </div>  
   )  
