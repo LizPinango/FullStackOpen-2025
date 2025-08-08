@@ -73,26 +73,33 @@ blogsRouter.delete('/:id', userExtractor, async(request, response, next) => {
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
-  const { title, author, url, likes } = request.body
+  const body = request.body
+
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes
+  }
 
   try {
-    const blog = await Blog.findById(request.params.id)
-
-    if (!blog) {
-      response.status(404).end()
-    }
-
-    blog.title = title
-    blog.author = author
-    blog.url = url
-    blog.likes = likes
-
-    const updatedBlog = await blog.save()
-
-    response.status(200).json(updatedBlog)
+    const updatedBlog = await Blog
+      .findByIdAndUpdate(request.params.id, blog, { new: true })
+      .populate('user', { username: 1, name: 1 })
+    if(!updatedBlog){
+      response.status(404).send({ error: 'The Blog has been eliminated' })
+    }else{
+      response.status(200).json(updatedBlog) 
+    }    
   } catch (exception) {
     next(exception)
   }  
 })
+/**
+ * findByIdAndUpdate returns null when the id doesn't exists in the DB
+ * the catch doesn't work in that case
+ * therefor I use and if to verify that the method response with something
+ * the catch is for the validation
+ */
 
 module.exports = blogsRouter;
