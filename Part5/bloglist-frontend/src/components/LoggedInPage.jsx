@@ -27,7 +27,6 @@ const LoggedInPage = ({user, blogs, setBlogs, handleLogout, handleMessage, setEr
     blogService
       .like(updatedBlog, blog.id)
         .then(returnedBlog => {
-          console.log(returnedBlog)
           setBlogs(blogs.map(b => b.id !== returnedBlog.id ? b : returnedBlog ))
           handleMessage(`you liked '${returnedBlog.title}' by ${returnedBlog.author}`)
         })
