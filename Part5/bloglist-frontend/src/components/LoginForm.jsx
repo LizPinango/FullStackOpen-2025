@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 const LoginForm = ({handleLogin, username, setUsername, password, setPassword}) => {  
   return (
     <form onSubmit={handleLogin}>

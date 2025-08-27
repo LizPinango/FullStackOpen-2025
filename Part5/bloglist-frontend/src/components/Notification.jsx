@@ -1,5 +1,5 @@
 const Notification = ({message, error}) => {
-  if (message != null){
+  if (message !== null){
     return(
       <div className={error ? 'message-box error-box' : 'message-box notification-box' }>
         <p>{message}</p>
