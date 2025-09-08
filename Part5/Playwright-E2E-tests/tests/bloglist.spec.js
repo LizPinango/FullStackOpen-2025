@@ -23,17 +23,13 @@ describe('Blog app', () => {
 
   describe('Login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
-      await page.getByRole('textbox').first().fill('user1')
-      await page.getByRole('textbox').last().fill('pass123')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'user1', 'pass123')
 
       await expect(page.getByText('Pedro Perez logged in')).toBeVisible()
     })
 
     test('fails with wrong credentials', async ({ page }) => {
-      await page.getByRole('textbox').first().fill('user1')
-      await page.getByRole('textbox').last().fill('nopass')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'user1', 'nopass')
       
       const errorDiv = page.locator('.error-box')
       await expect(errorDiv).toContainText('Wrong credentials')
