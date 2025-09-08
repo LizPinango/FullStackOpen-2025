@@ -24,37 +24,43 @@ const NewBlogForm = ({createBlog}) => {
   return(
     <form onSubmit={addBlog}>
       <div>
-        <label htmlFor="title">Title</label>
-        <input 
-          id="title"
-          type="text"
-          value={title}
-          placeholder='A catchy title...'
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
+        <label htmlFor="title">
+          Title
+          <input 
+            id="title"
+            type="text"
+            value={title}
+            placeholder='A catchy title...'
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </label>
       </div>
       <div>
-        <label htmlFor="author">Author</label>
-        <input
-          id="author"
-          type="text"
-          value={author}
-          placeholder='Author name...'
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
+        <label htmlFor="author">
+          Author
+          <input
+            id="author"
+            type="text"
+            value={author}
+            placeholder='Author name...'
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </label>
       </div>
       <div>
-        <label htmlFor="url">Url</label>
-        <input
-          id="url"
-          type="text"
-          value={url}
-          placeholder='http://...'
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
+        <label htmlFor="url">
+          Url
+          <input
+            id="url"
+            type="text"
+            value={url}
+            placeholder='http://...'
+            name="Url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </label>
       </div>
       <button type="submit">create</button>
     </form>
