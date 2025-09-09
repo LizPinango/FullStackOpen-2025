@@ -1,6 +1,6 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 
-const { loginWith, createblog } = require('./helper')
+const { loginWith, createblog, likeBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -89,5 +89,25 @@ describe('Blog app', () => {
         await expect(page.getByRole('button', {name: 'delete'})).not.toBeVisible()
       })
     })    
+
+    describe('and several blogs exist', () => {
+      beforeEach(async ({ page }) => {
+        await createblog(page, 'Test Blog 1', 'Test Author', 'Test Url 1')
+        await createblog(page, 'Test Blog 2', 'Test Author', 'Test Url 2')
+        await createblog(page, 'Test Blog 3', 'Test Author', 'Test Url 3')
+      })
+
+      test('the blogs are arranged in order of likes', async ({page}) => {
+        await likeBlog(page, 'Test Blog 1 - Test Author', 2)
+        await likeBlog(page, 'Test Blog 2 - Test Author', 1)
+        await likeBlog(page, 'Test Blog 3 - Test Author', 3)
+        
+        const blogTitles = await page.locator('.blog-container p:first-child').allTextContents()
+
+        expect(blogTitles[0]).toBe('Test Blog 3 - Test Author')
+        expect(blogTitles[1]).toBe('Test Blog 1 - Test Author')
+        expect(blogTitles[2]).toBe('Test Blog 2 - Test Author')
+      })
+    })
   })
 })
