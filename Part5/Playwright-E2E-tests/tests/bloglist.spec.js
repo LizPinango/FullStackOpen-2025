@@ -13,6 +13,14 @@ describe('Blog app', () => {
       }
     })
 
+    await request.post('http://localhost:3001/api/users', {
+      data: {
+        name: 'Maria Gomez',
+        username: 'user2',
+        password: 'clave456'
+      }
+    })
+
     await page.goto('http://localhost:5173')
   })
 
@@ -71,6 +79,14 @@ describe('Blog app', () => {
         const notification = page.locator('.notification-box')
         await expect(notification).toContainText("'Test Blog' by Test Author deleted")
         await expect(page.getByText('Test Blog - Test Author')).not.toBeVisible()
+      })
+
+      test('it can not be deleted by other users', async ({page, request}) => {
+        await page.getByRole('button', { name: 'Logout' }).click()
+        await loginWith(page, 'user2', 'clave456')
+
+        await page.getByRole('button', { name: 'show more' }).click()
+        await expect(page.getByRole('button', {name: 'delete'})).not.toBeVisible()
       })
     })    
   })
