@@ -10,7 +10,7 @@ const createblog = async (page, title, author, url) => {
   await page.getByLabel('Author').fill(author)
   await page.getByLabel('Url').fill(url)
   await page.getByRole('button', { name: 'create' }).click()
-  await page.getByText(`${title} - ${author}`).waitFor()
+  await page.getByText(`${title} - ${author}`).waitFor()//to make sure the blog is rendered
 }
 
 const likeBlog = async (page, text, n) => {
