@@ -59,6 +59,19 @@ describe('Blog app', () => {
         await page.getByRole('button', {name: 'like'}).click()
         await expect(page.getByText('likes 1')).toBeVisible()
       })
+
+      test('the user that created the blog can delete it', async ({page}) => {
+        await page.getByRole('button', { name: 'show more' }).click()
+
+        page.on('dialog', async (dialog) => {
+          await dialog.accept()
+        })
+        await page.getByRole('button', {name: 'delete'}).click()
+
+        const notification = page.locator('.notification-box')
+        await expect(notification).toContainText("'Test Blog' by Test Author deleted")
+        await expect(page.getByText('Test Blog - Test Author')).not.toBeVisible()
+      })
     })    
   })
 })
