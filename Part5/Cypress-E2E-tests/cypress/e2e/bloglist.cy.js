@@ -50,5 +50,22 @@ describe('Blog app', function() {
       cy.get('.notification-box').contains("a new blog 'Test Blog' by Test Author added")
       cy.contains('Test Blog - Test Author')
     })
+
+    describe('and a blog exist', function() {
+      beforeEach(function() {
+        cy.contains('button', 'New Blog').click()
+        cy.contains('label', 'Title').type('Test Blog')
+        cy.contains('label', 'Author').type('Test Author')
+        cy.contains('label', 'Url').type('Test Url')
+        cy.get('#add-blog-btn').click()
+      })
+
+      it('a blog can be liked', function() {
+        cy.contains('button', 'show more').click()
+        cy.contains('button', 'like').click()
+
+        cy.contains('likes 1')
+      })
+    })
   })
 })
