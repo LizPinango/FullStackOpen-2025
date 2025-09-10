@@ -62,7 +62,7 @@ const NewBlogForm = ({createBlog}) => {
           />
         </label>
       </div>
-      <button type="submit">create</button>
+      <button id="add-blog-btn" type="submit">create</button>
     </form>
   )
 }
