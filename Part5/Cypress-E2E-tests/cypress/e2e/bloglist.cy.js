@@ -81,5 +81,57 @@ describe('Blog app', function() {
         cy.contains('delete').should('not.exist') 
       })
     })
+
+    describe('and serveral blogs exist', function() {
+      beforeEach(function() {
+        cy.createBlog({ title: 'First Blog', author: 'Author 1', url: 'Url 1' })
+        cy.createBlog({ title: 'Second Blog', author: 'Author 2', url: 'Url 2' })
+        cy.createBlog({ title: 'Third Blog', author: 'Author 3', url: 'Url 3' })
+      })
+
+      it('the blogs are arranged in order of likes', function() {
+        cy.get('.blog-container:contains("First Blog")')
+          .find('button:contains("show more")')
+          .click();
+        cy.get('.blog-container:contains("First Blog")')
+          .find('button:contains("like")').as('like1')
+
+        cy.get('.blog-container:contains("Second Blog")')
+          .find('button:contains("show more")')
+          .click();
+        cy.get('.blog-container:contains("Second Blog")')
+          .find('button:contains("like")').as('like2')
+
+        cy.get('.blog-container:contains("Third Blog")')
+          .find('button:contains("show more")')
+          .click();
+        cy.get('.blog-container:contains("Third Blog")')
+          .find('button:contains("like")').as('like3')
+
+        // First Blog - 2 likes
+        cy.get('@like1').click()
+        cy.get('.blog-container:contains("First Blog")').should('contain', 'likes 1')
+        cy.get('@like1').click()       
+        cy.get('.blog-container:contains("First Blog")').should('contain', 'likes 2')
+
+        // Second Blog - 1 like
+        cy.get('@like2').click()
+        cy.get('.blog-container:contains("Second Blog")').should('contain', 'likes 1')
+
+        // Third Blog - 3 likes
+        cy.get('@like3').click()
+        cy.get('.blog-container:contains("Third Blog")').should('contain', 'likes 1')
+        cy.get('@like3').click()
+        cy.get('.blog-container:contains("Third Blog")').should('contain', 'likes 2')
+        cy.get('@like3').click()
+        cy.get('.blog-container:contains("Third Blog")').should('contain', 'likes 3')
+
+        cy.get('.blog-container').then((blogs) => {
+          expect(blogs.eq(0)).to.contain('Third Blog')
+          expect(blogs.eq(1)).to.contain('First Blog')
+          expect(blogs.eq(2)).to.contain('Second Blog')
+        })
+      })
+    })
   })
 })
