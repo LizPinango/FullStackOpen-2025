@@ -32,7 +32,7 @@ const App = () => {
     event.preventDefault(); 
     try {
       const user = await loginService.login({ username, password })      
-      blogService.setToken(user.token)
+      //blogService.setToken(user.token)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setUsername('')

@@ -39,9 +39,7 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.get('input:first').type('user1')
-      cy.get('input:last').type('pass123')
-      cy.get('#login-btn').click()
+      cy.login({ username: 'user1', password: 'pass123' })
     })
 
     it('A blog can be created', function() {
@@ -57,18 +55,7 @@ describe('Blog app', function() {
 
     describe('and a blog exist', function() {
       beforeEach(function() {
-        // 1. Intercept the POST petition and give it an alias
-        cy.intercept('POST', '/api/blogs').as('createBlog');
-
-        // 2. Execute the action that tirggers the POST petition
-        cy.contains('button', 'New Blog').click()
-        cy.contains('label', 'Title').type('Test Blog')
-        cy.contains('label', 'Author').type('Test Author')
-        cy.contains('label', 'Url').type('Test Url')        
-        cy.get('#add-blog-btn').click()
-
-        // 3. Wait for the petition to complete 
-        cy.wait('@createBlog');
+        cy.createBlog({ title: 'Test Blog', author: 'Test Author', url: 'Test Url' })
       })
 
       it('a blog can be liked', function() {
@@ -88,10 +75,7 @@ describe('Blog app', function() {
 
       it('it can not be deleted by other users', function() {
         cy.contains('button', 'Logout').click()
-
-        cy.get('input:first').type('user2')
-        cy.get('input:last').type('clave456')
-        cy.get('#login-btn').click()
+        cy.login({ username: 'user2', password: 'clave456' })
 
         cy.contains('button', 'show more').click()
         cy.contains('delete').should('not.exist') 
