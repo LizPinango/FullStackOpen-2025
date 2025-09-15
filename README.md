@@ -10,6 +10,7 @@
 - [Part3](#part3---programming-a-server-with-nodejs-and-express)
 - [Part4](#part4---testing-express-servers-user-administration)
 - [Part5](#part5---testing-react-apps)
+- [Part6](#part-6---advanced-state-management)
 
 ## Course Content
 
@@ -82,6 +83,17 @@ Objective ->  learn different ways of testing React code, and learn to implement
 - Testing React apps
 - End to end testing: Playwright
 - End to end testing: Cypress
+
+### Part 6 - Advanced state management
+
+Objective -> introduce the Redux library, learn about the lightweight version of Redux directly supported by React, namely the React context and useReducer hook, as well as the React Query library.
+
+#### Content
+
+- Flux-architecture and Redux
+- Many reducers
+- Communicating with server in a Redux application
+- React Query, useReducer and the context
 
 
 
