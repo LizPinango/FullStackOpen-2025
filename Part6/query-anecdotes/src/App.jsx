@@ -1,10 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useContext} from 'react'
 
+import NotificationContext from './NotificationContext'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import { getAnecdotes, updateAnecdote } from './requests'
 
 const App = () => {
+  const { notificationDispatch } = useContext(NotificationContext)
+
   const queryClient = useQueryClient()
 
   const updateAnecdoteMutation = useMutation({
@@ -17,6 +21,10 @@ const App = () => {
   const handleVote = (anecdote) => {
     const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 }
     updateAnecdoteMutation.mutate(updatedAnecdote)
+    notificationDispatch({ type: 'SET', payload: `you voted '${anecdote.content}'` })
+    setTimeout(() => {
+      notificationDispatch({ type: 'CLEAR' })
+    }, 5000)
   }
 
   const result = useQuery({
