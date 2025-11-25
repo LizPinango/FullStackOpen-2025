@@ -11,6 +11,7 @@
 - [Part4](#part4---testing-express-servers-user-administration)
 - [Part5](#part5---testing-react-apps)
 - [Part6](#part-6---advanced-state-management)
+- [Part7](#part-7---react-router-custom-hooks-styling-app-with-css-and-webpack)
 
 ## Course Content
 
@@ -95,6 +96,17 @@ Objective -> introduce the Redux library, learn about the lightweight version of
 - Communicating with server in a Redux application
 - React Query, useReducer and the context
 
+### Part 7 - React router, custom hooks, styling app with CSS and webpack
+
+Objective -> get familiar with React Router, learn more about hook functions and how to define a custom hook, and also learn more ways to add CSS styles to React applications.
+
+#### Content
+
+- React Router
+- Custom hooks
+- More about styles
+- Webpack
+- Class components, Miscellaneous
 
 
 
