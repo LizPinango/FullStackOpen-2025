@@ -1,33 +1,32 @@
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 
 import Blog from "./Blog";
 import NewBlogForm from "./NewBlogForm";
 import blogService from "../services/blogs";
 import Togglable from "./Togglable";
+import { setNotification } from "../reducers/notificationReducer";
 
 const LoggedInPage = ({
   user,
   blogs,
   setBlogs,
-  handleLogout,
-  handleMessage,
-  setError,
+  handleLogout
 }) => {
   const blogFormRef = useRef();
+
+  const dispatch = useDispatch()
 
   const createBlog = async (blogObject) => {
     blogService
       .create(blogObject)
       .then((returnedBlog) => {
         setBlogs(blogs.concat(returnedBlog));
-        handleMessage(
-          `a new blog '${returnedBlog.title}' by ${returnedBlog.author} added`,
-        );
+        dispatch(setNotification(`a new blog '${returnedBlog.title}' by ${returnedBlog.author} added`, 5))
         blogFormRef.current.toggleVisibility();
       })
       .catch((err) => {
-        setError(true);
-        handleMessage(err.response.data.error);
+        dispatch(setNotification(err.response.data.error, 5, true))
       });
   };
 
@@ -39,13 +38,10 @@ const LoggedInPage = ({
         setBlogs(
           blogs.map((b) => (b.id !== returnedBlog.id ? b : returnedBlog)),
         );
-        handleMessage(
-          `you liked '${returnedBlog.title}' by ${returnedBlog.author}`,
-        );
+        dispatch(setNotification(`you liked '${returnedBlog.title}' by ${returnedBlog.author}`, 5))
       })
       .catch((err) => {
-        setError(true);
-        handleMessage(err.response.data.error);
+        dispatch(setNotification(err.response.data.error, 5, true))
       });
   };
 
@@ -55,11 +51,10 @@ const LoggedInPage = ({
         .remove(blog.id)
         .then(() => {
           setBlogs(blogs.filter((b) => b.id !== blog.id));
-          handleMessage(`'${blog.title}' by ${blog.author} deleted`);
+          dispatch(setNotification(`'${blog.title}' by ${blog.author} deleted`, 5))
         })
         .catch((err) => {
-          setError(true);
-          handleMessage(err.response.data.error);
+          dispatch(setNotification(err.response.data.error, 5, true))
         });
     }
   };

@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
 import LoggedInPage from "./components/LoggedInPage";
+import { setNotification } from "./reducers/notificationReducer";
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -35,8 +37,7 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setError(true);
-      handleMessage("Wrong credentials");
+      dispatch(setNotification("Wrong credentials", 5, true))
     }
   };
 
@@ -45,17 +46,9 @@ const App = () => {
     setUser(null);
   };
 
-  const handleMessage = (message) => {
-    setMessage(message);
-    setTimeout(() => {
-      setMessage(null);
-      setError(false);
-    }, 7000);
-  };
-
   return (
     <div>
-      <Notification message={message} error={error} />
+      <Notification />
 
       {user === null ? (
         <LoginForm
@@ -71,8 +64,6 @@ const App = () => {
           blogs={blogs}
           setBlogs={setBlogs}
           handleLogout={handleLogout}
-          handleMessage={handleMessage}
-          setError={setError}
         />
       )}
     </div>
