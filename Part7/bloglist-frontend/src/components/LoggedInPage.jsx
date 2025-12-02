@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Blog from "./Blog";
 import NewBlogForm from "./NewBlogForm";
@@ -9,7 +9,6 @@ import { setNotification } from "../reducers/notificationReducer";
 
 const LoggedInPage = ({
   user,
-  blogs,
   setBlogs,
   handleLogout
 }) => {
@@ -17,19 +16,8 @@ const LoggedInPage = ({
 
   const dispatch = useDispatch()
 
-  const createBlog = async (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then((returnedBlog) => {
-        setBlogs(blogs.concat(returnedBlog));
-        dispatch(setNotification(`a new blog '${returnedBlog.title}' by ${returnedBlog.author} added`, 5))
-        blogFormRef.current.toggleVisibility();
-      })
-      .catch((err) => {
-        dispatch(setNotification(err.response.data.error, 5, true))
-      });
-  };
-
+  const blogs = useSelector(state => state.blogs)
+  
   const likeBlog = async (blog) => {
     const updatedBlog = { ...blog, likes: blog.likes + 1 };
     blogService
@@ -66,10 +54,10 @@ const LoggedInPage = ({
       <button onClick={() => handleLogout()}>Logout</button>
 
       <Togglable buttonLabel="New Blog" ref={blogFormRef}>
-        <NewBlogForm createBlog={createBlog} />
+        <NewBlogForm />
       </Togglable>
 
-      {blogs
+      {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
           <Blog

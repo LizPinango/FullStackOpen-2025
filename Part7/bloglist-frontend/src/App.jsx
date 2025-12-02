@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
 import LoggedInPage from "./components/LoggedInPage";
 import { setNotification } from "./reducers/notificationReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -17,8 +17,8 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    dispatch(initializeBlogs())
+  }, [dispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
@@ -60,8 +60,7 @@ const App = () => {
         />
       ) : (
         <LoggedInPage
-          user={user}
-          blogs={blogs}
+          user={user}          
           setBlogs={setBlogs}
           handleLogout={handleLogout}
         />
