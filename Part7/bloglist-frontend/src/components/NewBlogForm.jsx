@@ -8,7 +8,7 @@ const NewBlogForm = () => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const addBlog = (event) => {
     event.preventDefault();
@@ -18,8 +18,8 @@ const NewBlogForm = () => {
       author: author,
       url: url,
     };
-    
-    dispatch(createBlog(newBlog))
+
+    dispatch(createBlog(newBlog));
 
     setTitle("");
     setAuthor("");

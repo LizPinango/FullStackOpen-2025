@@ -9,15 +9,14 @@ import { setNotification } from "./reducers/notificationReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    dispatch(initializeBlogs())
+    dispatch(initializeBlogs());
   }, [dispatch]);
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      dispatch(setNotification("Wrong credentials", 5, true))
+      dispatch(setNotification("Wrong credentials", 5, true));
     }
   };
 
@@ -59,11 +58,7 @@ const App = () => {
           setPassword={setPassword}
         />
       ) : (
-        <LoggedInPage
-          user={user}          
-          setBlogs={setBlogs}
-          handleLogout={handleLogout}
-        />
+        <LoggedInPage user={user} handleLogout={handleLogout} />
       )}
     </div>
   );
