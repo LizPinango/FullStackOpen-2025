@@ -1,20 +1,24 @@
 import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Blog from "./Blog";
 import NewBlogForm from "./NewBlogForm";
 import Togglable from "./Togglable";
+import { clearUser } from "../reducers/userReducer";
 
-const LoggedInPage = ({ user, handleLogout }) => {
+const LoggedInPage = () => {
   const blogFormRef = useRef();
 
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user)
+
+  const dispatch = useDispatch()
 
   return (
     <>
       <h2>Blogs</h2>
       <p>{user.name} logged in </p>
-      <button onClick={() => handleLogout()}>Logout</button>
+      <button onClick={() => dispatch(clearUser())}>Logout</button>
 
       <Togglable buttonLabel="New Blog" ref={blogFormRef}>
         <NewBlogForm />
