@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import LoggedInPage from "./components/LoggedInPage";
 import { initializeBlogs } from "./reducers/blogReducer";
-import { initializeUser } from "./reducers/loggedUserReducer";
+import { initializeUser, clearUser } from "./reducers/loggedUserReducer";
+import { usersInit } from "./reducers/usersReducer";
+import UsersPage from "./pages/usersPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -13,9 +16,10 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeUser())
     dispatch(initializeBlogs());
+    dispatch(usersInit())
   }, []);
 
-  const loggedUser = useSelector((state) => state.loggedUser)
+  const loggedUser = useSelector((state) => state.loggedUser)  
 
   if (!loggedUser) {
     return (
@@ -28,8 +32,16 @@ const App = () => {
 
   return (
     <div>
+      <h2>Blogs</h2>
+      <p>{loggedUser.name} logged in </p>
+      <button onClick={() => dispatch(clearUser())}>Logout</button>
+      
       <Notification />
-      <LoggedInPage />
+
+      <Routes>
+        <Route path="/users" element={<UsersPage />} />
+        <Route path="/" element={<LoggedInPage />} />
+      </Routes>      
     </div>
   );
 };
