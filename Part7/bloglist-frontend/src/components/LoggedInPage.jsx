@@ -4,20 +4,20 @@ import { useSelector, useDispatch } from "react-redux";
 import Blog from "./Blog";
 import NewBlogForm from "./NewBlogForm";
 import Togglable from "./Togglable";
-import { clearUser } from "../reducers/userReducer";
+import { clearUser } from "../reducers/loggedUserReducer";
 
 const LoggedInPage = () => {
   const blogFormRef = useRef();
 
   const blogs = useSelector((state) => state.blogs);
-  const user = useSelector((state) => state.user)
+  const loggedUser = useSelector((state) => state.loggedUser)
 
   const dispatch = useDispatch()
 
   return (
     <>
       <h2>Blogs</h2>
-      <p>{user.name} logged in </p>
+      <p>{loggedUser.name} logged in </p>
       <button onClick={() => dispatch(clearUser())}>Logout</button>
 
       <Togglable buttonLabel="New Blog" ref={blogFormRef}>
@@ -27,7 +27,7 @@ const LoggedInPage = () => {
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} />
+          <Blog key={blog.id} blog={blog} user={loggedUser} />
         ))}
     </>
   );

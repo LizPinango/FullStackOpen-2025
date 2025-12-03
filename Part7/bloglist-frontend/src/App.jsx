@@ -5,7 +5,7 @@ import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import LoggedInPage from "./components/LoggedInPage";
 import { initializeBlogs } from "./reducers/blogReducer";
-import { initializeUser } from "./reducers/userReducer";
+import { initializeUser } from "./reducers/loggedUserReducer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -15,9 +15,9 @@ const App = () => {
     dispatch(initializeBlogs());
   }, []);
 
-  const user = useSelector((state) => state.user)
+  const loggedUser = useSelector((state) => state.loggedUser)
 
-  if (!user) {
+  if (!loggedUser) {
     return (
       <div>
         <Notification />
