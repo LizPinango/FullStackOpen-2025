@@ -34,6 +34,20 @@ const BlogPage = () => {
           <button onClick={() => handleDelete(blog)}>delete</button>
         )}
       </div>
+      <div>
+        {blog.comments && blog.comments.length > 0 ? (
+          <>
+            <h3>Comments</h3>
+            <ul>
+              {blog.comments.map((comment, index) => (
+                <li key={index}>{comment}</li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p>No comments yet</p>
+        )}
+      </div>
     </div>
   );
 };

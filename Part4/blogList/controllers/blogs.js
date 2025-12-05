@@ -1,8 +1,6 @@
 const blogsRouter = require('express').Router();
-const jwt = require('jsonwebtoken')
 
 const Blog = require('../models/blog');
-const User = require('../models/user')
 const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
@@ -41,7 +39,8 @@ blogsRouter.post('/', userExtractor, async (request, response, next) => {
     author: body.author,
     url: body.url,
     likes: body.likes || 0,
-    user: user._id
+    user: user._id,
+    comments: []
   })
 
   try {
@@ -50,6 +49,22 @@ blogsRouter.post('/', userExtractor, async (request, response, next) => {
     await user.save()
     await savedBlog.populate('user', { username: 1, name: 1 })
     response.status(201).json(savedBlog)
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  const { comment } = request.body  
+  
+  try {
+    const blog = await Blog.findById(request.params.id) 
+    if (!blog) {
+      return response.status(404).json({ error: 'blog not found' })
+    }
+    blog.comments = blog.comments ? blog.comments.concat(comment) : [comment]
+    const updatedBlog =  await blog.save()
+    response.status(201).json(updatedBlog)
   } catch (exception) {
     next(exception)
   }
@@ -80,7 +95,8 @@ blogsRouter.put('/:id', async (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    comments: body.comments
   }
 
   try {
