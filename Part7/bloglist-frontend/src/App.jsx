@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
@@ -37,6 +37,11 @@ const App = () => {
       <h2>Blogs</h2>
       <p>{loggedUser.name} logged in </p>
       <button onClick={() => dispatch(clearUser())}>Logout</button>
+
+      <div>
+        <Link to={"/"}>Home</Link>
+        <Link to={"/users/"}>Users</Link>
+      </div>
       
       <Notification />
 
