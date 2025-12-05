@@ -13,7 +13,7 @@ const blogSlice = createSlice({
     appendBlog(state, action) {
       state.push(action.payload);
     },
-    addVote(state, action) {
+    update(state, action) {
       return state.map((b) =>
         b.id !== action.payload.id ? b : action.payload,
       );
@@ -24,7 +24,7 @@ const blogSlice = createSlice({
   },
 });
 
-const { setBlogs, appendBlog, addVote, removeBlog } = blogSlice.actions;
+const { setBlogs, appendBlog, update, removeBlog } = blogSlice.actions;
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -60,7 +60,7 @@ export const likeBlog = (blogObject) => {
         },
         blogObject.id,
       );
-      dispatch(addVote(likedBlog));
+      dispatch(update(likedBlog));
       dispatch(
         setNotification(
           `you liked '${likedBlog.title}' by ${likedBlog.author}`,
@@ -89,5 +89,22 @@ export const deleteBlog = (blogObject) => {
     }
   };
 };
+
+export const commentBlog = (commentObject, id) => {
+  return async (dispatch) => {
+    try {
+      const commentedBlog = await blogService.comment(commentObject, id);
+      dispatch(update(commentedBlog));
+      dispatch(
+        setNotification(
+          `you added a comment to '${commentedBlog.title}'`,
+          5,
+        ),
+      );
+    } catch (e) {
+      dispatch(setNotification(e.response.data.error, 5, true));
+    }
+  };
+}
 
 export default blogSlice.reducer;
