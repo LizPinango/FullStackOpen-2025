@@ -10,6 +10,7 @@ import { initializeUser, clearUser } from "./reducers/loggedUserReducer";
 import { usersInit } from "./reducers/usersReducer";
 import UsersPage from "./pages/usersPage";
 import UserPage from "./pages/UserPage";
+import BlogPage from "./pages/BlogPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const App = () => {
       <Routes>
         <Route path="/users" element={<UsersPage />} />
         <Route path="/users/:id" element={<UserPage />}/>
+        <Route path="/blogs/:id" element={<BlogPage />}/>
         <Route path="/" element={<LoggedInPage />} />
       </Routes>      
     </div>
