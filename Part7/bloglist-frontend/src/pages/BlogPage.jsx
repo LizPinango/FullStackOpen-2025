@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { Heart, Trash2 } from "lucide-react";
 
 import { likeBlog, deleteBlog, commentBlog } from "../reducers/blogReducer";
 
@@ -9,6 +10,10 @@ const BlogPage = () => {
   const loggedUser = useSelector((state) => state.loggedUser)  
 
   const dispatch = useDispatch();
+
+  if (!blog) {
+    return <div>loading ...</div>;
+  }
 
   let canRemove = false;
 
@@ -28,35 +33,53 @@ const BlogPage = () => {
   }
 
   return (
-    <div className="blog-container">
-      <h2>
+    <div className="mx-4 my-10 text-primary-700">
+      <h2 className="text-4xl font-bold text-center mb-10">
         {blog.title} - {blog.author}
       </h2>
-      <div>
-        <p>{blog.url}</p>
-        <p>likes {blog.likes}</p>
-        <button onClick={() => dispatch(likeBlog(blog))}>like</button>
-        <p>save by {blog.user ? blog.user.username : "anonymous"}</p>
-        {canRemove && (
-          <button onClick={() => handleDelete(blog)}>delete</button>
-        )}
+      <span className="text-lg">{blog.url}</span>
+      <div className="flex justify-around mt-4">        
+        <span className="text-lg font-bold">
+          save by {blog.user ? blog.user.username : "anonymous"}
+        </span>
+        <div className="flex justify-end space-x-2">
+          <button onClick={() => dispatch(likeBlog(blog))} className="border-2 border-primary-700 hover:border-accent bg-primary-50 hover:bg-accent-light hover:text-accent rounded-lg py-1 px-2">
+            <div className="flex space-x-1">
+              <Heart /><span>{blog.likes}</span>
+            </div>          
+          </button>        
+          {canRemove && (
+            <button onClick={() => handleDelete(blog)} className="border-2 border-primary-700 hover:border-gray-700 bg-primary-50 hover:bg-gray-200 hover:text-gray-700 rounded-lg py-1 px-2">
+              <div>
+                <Trash2 />  
+              </div>            
+            </button>
+          )}
+        </div>        
       </div>
-      <div>
-        <h3>Comments</h3>
-        <p> Add a comment</p>
-        <form onSubmit={handleComment}>
-          <input type="text" name="comment" />
-          <button type="submit">add comment</button>
-        </form>
-        {blog.comments && blog.comments.length > 0 ? (
-          <ul>
-            {blog.comments.map((comment, index) => (
-              <li key={index}>{comment}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No comments yet</p>
-        )}
+      <div className="mt-10">
+        <form onSubmit={handleComment} className="flex flex-col items-center space-y-4">
+          <textarea name="comment" className="border rounded-lg bg-gray-100 w-4/6 h-24 p-2"></textarea>
+          <button type="submit" className="border-2 border-primary-700 bg-primary-50 hover:bg-primary-700 hover:text-primary-50 font-bold rounded-lg py-1 px-2">
+            comment
+          </button>
+        </form>  
+        <div className="px-10">
+          <h3 className="mt-10 text-xl font-bold">Comments</h3>
+          {blog.comments && blog.comments.length > 0 ? (
+            <ul className="mt-4">
+              {blog.comments.map((comment, index) => (
+                <li key={index}>
+                  <div className="rounded-lg bg-gray-100 border-2 border-primary-700 my-2 p-2">
+                    <p>{comment}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No comments yet</p>
+          )}   
+        </div>                   
       </div>
     </div>
   );

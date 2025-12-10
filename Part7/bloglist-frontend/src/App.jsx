@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
-import LoggedInPage from "./components/LoggedInPage";
-import { initializeBlogs } from "./reducers/blogReducer";
-import { initializeUser, clearUser } from "./reducers/loggedUserReducer";
-import { usersInit } from "./reducers/usersReducer";
+import Navbar from "./components/Navbar";
+import LoginPage from "./pages/LoginPage";
 import UsersPage from "./pages/usersPage";
 import UserPage from "./pages/UserPage";
 import BlogPage from "./pages/BlogPage";
+import HomePage from "./pages/HomePage";
+import { initializeBlogs } from "./reducers/blogReducer";
+import { initializeUser } from "./reducers/loggedUserReducer";
+import { usersInit } from "./reducers/usersReducer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -27,29 +28,21 @@ const App = () => {
     return (
       <div>
         <Notification />
-        <LoginForm />
+        <LoginPage />
       </div>
     )
   }
 
   return (
     <div>
-      <h2>Blogs</h2>
-      <p>{loggedUser.name} logged in </p>
-      <button onClick={() => dispatch(clearUser())}>Logout</button>
-
-      <div>
-        <Link to={"/"}>Home</Link>
-        <Link to={"/users/"}>Users</Link>
-      </div>
-      
+      <Navbar />
       <Notification />
 
       <Routes>
         <Route path="/users" element={<UsersPage />} />
         <Route path="/users/:id" element={<UserPage />}/>
         <Route path="/blogs/:id" element={<BlogPage />}/>
-        <Route path="/" element={<LoggedInPage />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>      
     </div>
   );
